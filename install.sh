@@ -99,6 +99,7 @@ mkdir -p pretrained_checkpoint
 echo "Downloading sam models using downloader script..."
 cd checkpoints && \
 ./download_ckpts.sh && \
+python model_downloader.py \
 cd ..
 echo "Model check/download complete."
 
