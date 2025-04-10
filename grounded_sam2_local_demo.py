@@ -118,11 +118,32 @@ annotated_frame = box_annotator.annotate(scene=img.copy(), detections=detections
 
 label_annotator = sv.LabelAnnotator()
 annotated_frame = label_annotator.annotate(scene=annotated_frame, detections=detections, labels=labels)
-cv2.imwrite(os.path.join(OUTPUT_DIR, "groundingdino_annotated_image.jpg"), annotated_frame)
+
+# Construct the output path based on the input image path
+img_path_obj = Path(img_path)
+try:
+    relative_path = img_path_obj.relative_to("notebooks")
+    a = relative_path.parent.name
+    b = relative_path.stem
+    output_filename_base = f"{a}_{b}"
+except ValueError:
+    # Handle cases where the image is not under 'notebooks'
+    print(f"Warning: Image path '{img_path}' is not relative to 'notebooks'. Using default naming.")
+    output_filename_base = Path(img_path).stem
+
+output_filename_annotated = f"{output_filename_base}_groundingdino_annotated.jpg"
+output_path_annotated = os.path.join(OUTPUT_DIR, output_filename_annotated)
+cv2.imwrite(output_path_annotated, annotated_frame)
+
 
 mask_annotator = sv.MaskAnnotator()
-annotated_frame = mask_annotator.annotate(scene=annotated_frame, detections=detections)
-cv2.imwrite(os.path.join(OUTPUT_DIR, "grounded_sam2_annotated_image_with_mask.jpg"), annotated_frame)
+annotated_frame_with_mask = mask_annotator.annotate(scene=img.copy(), detections=detections) # Use img.copy() to start fresh for mask annotation
+
+# Also update the second image filename for consistency
+output_filename_mask = f"{output_filename_base}_grounded_sam2_mask.jpg"
+output_path_mask = os.path.join(OUTPUT_DIR, output_filename_mask)
+cv2.imwrite(output_path_mask, annotated_frame_with_mask)
+
 
 """
 Dump the results in standard format and save as json files
