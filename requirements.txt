@@ -1,0 +1,26 @@
+-f https://download.pytorch.org/whl/torch_stable.html
+
+torch==2.3.0+cu121
+torchvision==0.18.0+cu121
+xformers==0.0.26.post1
+transformers>=4.28.1
+safetensors>=0.3.0
+aiohttp
+pyyaml
+numpy
+Pillow
+scipy
+tqdm
+psutil
+kornia>=0.7.1
+spandrel
+
+
+#sam-hq requirements
+opencv-python
+pycocotools
+matplotlib
+onnxruntime
+onnx
+timm
+requests
